@@ -50,7 +50,7 @@ export function KpiRow() {
 
   return (
     <Card>
-      <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-5 xl:grid-cols-4">
         <Stat label="Cost today" value={formatMoney(today.total_cost, currency)} note={costNote(today)} />
         <Stat label="Electricity today" value={`${formatNumber(today.energy_kwh)} kWh`} />
         <Stat label="Water today" value={`${formatNumber(today.water_litres)} L`} />

@@ -9,6 +9,7 @@ export type ElectricityBucket = Schemas["ElectricityBucket"];
 export type WaterBucket = Schemas["WaterBucket"];
 export type Tariff = Schemas["TariffOut"];
 export type ValveEvent = Schemas["ValveEventOut"];
+export type LedEvent = Schemas["LedEventOut"];
 export type Resource = "electricity" | "water";
 export type Interval = "minute" | "hour" | "day";
 
@@ -53,6 +54,7 @@ export const api = {
   summary: () => request<Summary>("/api/summary"),
   tariffs: () => request<Tariff[]>("/api/tariffs"),
   valveHistory: (limit: number) => request<ValveEvent[]>(`/api/valve/history?limit=${limit}`),
+  ledHistory: (limit: number) => request<LedEvent[]>(`/api/led/history?limit=${limit}`),
 
   history: <T>(resource: Resource, interval: Interval, start: Date, end: Date) => {
     const query = new URLSearchParams({
@@ -65,6 +67,8 @@ export const api = {
 
   setValve: (open: boolean) =>
     request<ValveEvent>("/api/valve", { method: "POST", body: JSON.stringify({ open }) }),
+
+  setLed: (on: boolean) => request<LedEvent>("/api/led", { method: "POST", body: JSON.stringify({ on }) }),
 
   setTariff: (resource: Resource, pricePerUnit: number) =>
     request<Tariff>(`/api/tariffs/${resource}`, {

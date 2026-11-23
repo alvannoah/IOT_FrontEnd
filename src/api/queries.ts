@@ -35,7 +35,8 @@ export function useValveHistory(limit: number) {
   return useQuery({
     queryKey: ["valve-history", limit],
     queryFn: () => api.valveHistory(limit),
-    refetchInterval: 30_000,
+    // Kept as fresh as the status, since the water card times the pump's safety stop from it.
+    refetchInterval: 5_000,
   });
 }
 
@@ -51,6 +52,25 @@ export function useHistory<T>(resource: Resource, preset: RangePreset) {
     refetchInterval: preset.interval === "minute" ? 20_000 : 60_000,
     // Keep the current chart on screen while another range loads.
     placeholderData: keepPreviousData,
+  });
+}
+
+export function useLedHistory(limit: number) {
+  return useQuery({
+    queryKey: ["led-history", limit],
+    queryFn: () => api.ledHistory(limit),
+    refetchInterval: 30_000,
+  });
+}
+
+export function useSetLed() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: api.setLed,
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: ["status"] });
+      client.invalidateQueries({ queryKey: ["led-history"] });
+    },
   });
 }
 

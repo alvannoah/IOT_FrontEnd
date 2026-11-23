@@ -59,6 +59,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/led": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Led
+         * @description Polled by the Arduino: "1" means switch the LED strip on, "0" means off.
+         */
+        get: operations["get_led_api_led_get"];
+        put?: never;
+        /** Set Led */
+        post: operations["set_led_api_led_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/status": {
         parameters: {
             query?: never;
@@ -153,6 +174,23 @@ export interface paths {
         };
         /** Valve History */
         get: operations["valve_history_api_valve_history_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/led/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Led History */
+        get: operations["led_history_api_led_history_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -265,6 +303,21 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** LedCommand */
+        LedCommand: {
+            /** On */
+            on: boolean;
+        };
+        /** LedEventOut */
+        LedEventOut: {
+            /** Is On */
+            is_on: boolean;
+            /**
+             * Changed At
+             * Format: date-time
+             */
+            changed_at: string;
+        };
         /** SensorStatus */
         SensorStatus: {
             /** Online */
@@ -276,6 +329,8 @@ export interface components {
         StatusOut: {
             /** Valve Open */
             valve_open: boolean;
+            /** Led On */
+            led_on: boolean;
             electricity: components["schemas"]["SensorStatus"];
             water: components["schemas"]["SensorStatus"];
             latest_electricity: components["schemas"]["ElectricityReadingOut"] | null;
@@ -509,6 +564,59 @@ export interface operations {
             };
         };
     };
+    get_led_api_led_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+        };
+    };
+    set_led_api_led_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LedCommand"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LedEventOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     status_api_status_get: {
         parameters: {
             query?: never;
@@ -653,6 +761,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ValveEventOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    led_history_api_led_history_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LedEventOut"][];
                 };
             };
             /** @description Validation Error */

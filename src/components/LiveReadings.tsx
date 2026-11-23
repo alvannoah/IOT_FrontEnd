@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import type { Status } from "../api/client";
 import { useStatus } from "../api/queries";
 import { formatNumber, timeAgo } from "../lib/format";
+import { useNow } from "../lib/useNow";
 import { Card, Stat, StatusBadge } from "./ui";
 
 function SensorBadge({ sensor, stale }: { sensor: Status["water"]; stale: boolean }) {
@@ -19,6 +20,8 @@ function Readings({ online, children }: { online: boolean; children: ReactNode }
 
 export function LiveReadings() {
   const { data, isRefetchError: stale } = useStatus();
+  // Keeps "last seen 12s ago" moving even when the readings themselves don't change.
+  useNow(5_000);
   if (!data) return null;
 
   const { electricity, water, latest_electricity: power, latest_water: flow } = data;

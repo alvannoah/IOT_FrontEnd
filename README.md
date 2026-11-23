@@ -40,7 +40,7 @@ frontend code the change breaks.
 
 | Data | Every |
 | --- | --- |
-| Valve state, sensors, latest readings | 5 s |
+| Water and LED state, sensors, latest readings, water changes | 5 s |
 | Today, month and projected figures | 30 s |
 | Graphs | 20 s for the last hour, otherwise 60 s |
 

@@ -5,7 +5,7 @@ import { LiveReadings } from "./components/LiveReadings";
 import { KpiRow, MonthCard } from "./components/Summary";
 import { Tariffs } from "./components/Tariffs";
 import { Notice } from "./components/ui";
-import { ValveControl, ValveLog } from "./components/Valve";
+import { ChangeLog, LedControl, WaterControl } from "./components/Controls";
 import { RANGE_PRESETS } from "./lib/ranges";
 
 function ConnectionNotice() {
@@ -57,10 +57,15 @@ export function App() {
       <ConnectionNotice />
 
       <div className="grid gap-4 md:grid-cols-[2fr_1fr]">
-        <MonthCard />
-        <ValveControl />
+        <div className="grid content-start gap-4">
+          <MonthCard />
+          <KpiRow />
+        </div>
+        <div className="grid content-start gap-4">
+          <WaterControl />
+          <LedControl />
+        </div>
       </div>
-      <KpiRow />
       <LiveReadings />
 
       <div className="pt-4">
@@ -72,7 +77,7 @@ export function App() {
 
       <div className="grid gap-4 md:grid-cols-2">
         <Tariffs />
-        <ValveLog />
+        <ChangeLog />
       </div>
     </main>
   );
